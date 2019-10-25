@@ -37,7 +37,7 @@ try {
   // Initialize handlers
   handlers.initialize(slackController, msTeamsController)
   msTeamsController.webserver.post('/slack/receive', handlers.handleSlackEvents)
-  msTeamsController.webserver.get('/health', handlers.healthCheck)
+  msTeamsController.webserver.get('/v5/topbot-ms/health', handlers.healthCheck)
   msTeamsController.ready(handlers.handleMsTeamsReady)
 } catch (e) {
   logger.logFullError(e)

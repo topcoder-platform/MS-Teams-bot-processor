@@ -1,0 +1,7 @@
+version: '3'
+services:
+  ms-teams-bot:
+    image: ms-teams-bot:latest
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
