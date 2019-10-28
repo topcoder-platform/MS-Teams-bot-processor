@@ -2,7 +2,7 @@
 
 ## Overview
 
-Topbot-ms can be invoked by its name `@topbot`. It supports the following commands on Ms Teams,
+Topbot-ms can be invoked by its name `@topbot`. It supports the following commands on Ms Teams, 
 
 | Command&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description|
 |---------|------------|
