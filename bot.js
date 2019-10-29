@@ -13,7 +13,7 @@ require('dotenv').config()
 // Create ms teams controller
 try {
   const msTeamsController = new Botkit({
-    webhook_uri: '/api/messages',
+    webhook_uri: '/v5/topbot-ms/api/messages',
     adapterConfig: {
       appId: process.env.APP_ID,
       appPassword: process.env.APP_PASSWORD
@@ -36,7 +36,7 @@ try {
 
   // Initialize handlers
   handlers.initialize(slackController, msTeamsController)
-  msTeamsController.webserver.post('/slack/receive', handlers.handleSlackEvents)
+  msTeamsController.webserver.post('/v5/topbot-ms/slack/receive', handlers.handleSlackEvents)
   msTeamsController.webserver.get('/v5/topbot-ms/health', handlers.healthCheck)
   msTeamsController.ready(handlers.handleMsTeamsReady)
 } catch (e) {
