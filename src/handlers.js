@@ -204,7 +204,7 @@ async function handleMsTeamsReady () {
 async function healthCheck (req, res) {
   try {
     // Pass the webhook event into the controller to be processed
-    await res.json({ok:true});
+    await res.json({ ok: true })
   } catch (e) {
     logger.logFullError(e)
   }
