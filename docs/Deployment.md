@@ -116,7 +116,7 @@ You will need to create free accounts for Ms Teams and Slack in order to deploy 
 
 9. Now follow the steps in `Slack setup` section. You should be able to deploy Slack and start the server. Come back to `App studio` -> `Bots` once done and follow subsequent steps.
 
-10. In `Messaging endpoint` provide value `NGROK_URL/api/messages`
+10. In `Messaging endpoint` provide value `NGROK_URL/v5/topbot-ms/api/messages`
 
 11. Click `Add` in `Commands`. Provide values, command text as `request`, Help text `Send a project description message`. Scope all 3 and click `Save`
 
@@ -208,7 +208,7 @@ You will need to create free accounts for Ms Teams and Slack in order to deploy 
 
 11. Follow steps in the `Start server` section of this document. Once done, come back and follow subsequent steps.
 
-12. Once you have the NGROK_URL, click on `Features` -> ` Interactive Components`. Turn it on. In the `Request URL` section provide url, `NGROK_URL/slack/receive` and click `Save changes`
+12. Once you have the NGROK_URL, click on `Features` -> ` Interactive Components`. Turn it on. In the `Request URL` section provide url, `NGROK_URL/v5/topbot-ms/slack/receive` and click `Save changes`
 
 ![](images/interactive.png)
 
@@ -218,7 +218,7 @@ You will need to create free accounts for Ms Teams and Slack in order to deploy 
 
 ![](images/bot_events.png)
 
-15. Scroll up and provide a `Request URL`. Provide value `NGROK_URL/slack/receive` and click `Save changes` once verified. If you need to reinstall the app, then do so.
+15. Scroll up and provide a `Request URL`. Provide value `NGROK_URL/v5/topbot-ms/slack/receive` and click `Save changes` once verified. If you need to reinstall the app, then do so.
 
 ![](images/verified.png)
 
