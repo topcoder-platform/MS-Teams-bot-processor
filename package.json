@@ -2,9 +2,9 @@
   "name": "topbot",
   "version": "1.0.0",
   "description": "Makes communication possible between slack and microsoft teams",
-  "main": "bot.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node bot.js",
+    "start": "node app.js",
     "lint": "standard",
     "lint:fix": "standard --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,6 +16,8 @@
     "botkit": "^4.5.0",
     "config": "^3.2.2",
     "dotenv": "^8.1.0",
+    "http-status-codes": "^1.4.0",
+    "node-fetch": "^2.6.0",
     "uuid": "^3.3.3",
     "winston": "^3.2.1"
   },
