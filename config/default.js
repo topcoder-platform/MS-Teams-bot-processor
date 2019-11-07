@@ -79,7 +79,36 @@ module.exports = {
     CREATE_PROJECT: 'https://api.topcoder-dev.com/v4/projects',
     INVITE_MEMBER: (projectId) => `https://api.topcoder-dev.com/v4/projects/${projectId}/members/invite`,
     PROJECT_URI: (projectId) => `https://connect.topcoder-dev.com/projects/${projectId}`,
-    PROJECT_TYPE: 'app',
-    INVITE_ROLE: 'customer'
+    PROJECT_TYPE: 'scoped-solutions',
+    INVITE_ROLE: 'customer',
+    PROJECT_DETAILS_DEV_QA: {
+      intakePurpose: 'client-request',
+      utm: {
+        code: 'topbot'
+      },
+      appDefinition: {
+        deliverables: ['dev-qa'],
+        needAdditionalScreens: 'no',
+        targetDevices: ['mobile'],
+        mobilePlatforms: '',
+        addons: {
+          development: ''
+        }
+      },
+      apiDefinition: {
+        notes: ''
+      },
+      techstack: {
+        hasLanguagesPref: false,
+        hasFrameworksPref: '',
+        hasDatabasePref: '',
+        hasServerPref: '',
+        hasHostingPref: '',
+        noPref: true,
+        sourceControl: '',
+        languages: ''
+      },
+      hideDiscussions: true
+    }
   }
 }

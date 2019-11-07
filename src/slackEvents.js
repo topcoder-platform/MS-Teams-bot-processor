@@ -206,7 +206,12 @@ async function handleProjectNameDialogSubmission (slackBot, message) {
         param: {
           name: projectName,
           description: request.description,
-          type: config.get('CONNECT.PROJECT_TYPE')
+          type: config.get('CONNECT.PROJECT_TYPE'),
+          templateId: 221,
+          version: 'v3',
+          estimation: [],
+          attachments: [],
+          details: config.get('CONNECT.PROJECT_DETAILS_DEV_QA')
         }
       })
     })
