@@ -26,7 +26,7 @@ module.exports = {
     PROJECT_RESPONSE_EMPTY: 'Your response cannot be empty. Please provide a valid response.',
     PROJECT_ACCEPTED: 'Project has been accepted',
     ACCEPT_CLICKED: 'Successfully initiated project creation. You will be notified once it is created',
-    PROJECT_CREATED: (name, connectUri) => `Project successfully created at [${name}](${connectUri})`,
+    PROJECT_CREATED: (name, connectUri) => `*${name}* Project successfully created at ${connectUri}`,
     ALREADY_RESPONDED: 'You have already responded to the request',
     PROJECT_ALREADY_ACCEPTED: 'You have already accepted the project',
     PROJECT_DECLINED: 'Sorry, the client declined the project.',
