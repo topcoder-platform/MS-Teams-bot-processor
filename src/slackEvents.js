@@ -10,6 +10,7 @@ const bot = require('./bot')
 const logger = require('../common/logger')
 
 const CONSTANTS = config.get('CONSTANTS')
+const CONNECT = config.get('CONNECT')
 
 /**
  * Handles interactive Slack messages like button clicks
@@ -239,10 +240,11 @@ async function handleProjectNameDialogSubmission (slackBot, message) {
     }
 
     // Post success to slack
+    const projectURI = CONNECT.PROJECT_URI(projectId)
     await slackBot.api.chat.postMessage({
       channel: request.slackMessage.channel,
       thread_ts: request.slackMessage.ts,
-      text: CONSTANTS.PROJECT_CREATED
+      text: CONSTANTS.PROJECT_CREATED(projectName, projectURI)
     })
     // Show success message and prompt for email
     await bot.msTeamsBot.say(CONSTANTS.PROMPT_FOR_EMAIL(projectName))
