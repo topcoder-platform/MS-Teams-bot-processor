@@ -116,23 +116,27 @@ You will need to create free accounts for Ms Teams and Slack in order to deploy 
 
 9. Now follow the steps in `Slack setup` section. You should be able to deploy Slack and start the server. Come back to `App studio` -> `Bots` once done and follow subsequent steps.
 
-10. In `Messaging endpoint` provide value `NGROK_URL/api/messages`
+10. In `Messaging endpoint` provide value `NGROK_URL/v5/topbot-ms/api/messages`
 
-11. Click `Add` in `Commands`. Provide values command text `request`, Help text `Send a project description message`. Scope all 3 and click `Save`
+11. Click `Add` in `Commands`. Provide values, command text as `request`, Help text `Send a project description message`. Scope all 3 and click `Save`
 
 ![](images/command.png)
 
-12. Click `Finish` -> `Test and distribute` -> `Download`. Save the zip file
+12. Repeat step 11 for `email` command. Provide values, command text as `email`, Help text `Provide an email id to invite to project`. Scope all 3 and click `Save`
 
-13. Go to `...` -> `Browse all apps` -> `Upload a custom app` and upload the zip file from step 12
+![](images/email.png)
 
-14. Click on the uploaded app and `Add` it to team by selecting `Add to team` in dropdown.
+13. Click `Finish` -> `Test and distribute` -> `Download`. Save the zip file
+
+14. Go to `...` -> `More apps` -> `Upload a custom app` and upload the zip file from step 12
+
+15. Click on the uploaded app and `Add` it to team by selecting `Add to team` in dropdown.
 
 ![](images/add_app.png)
 
 ![](images/add_app_team.png)
 
-15. Now if you go to the `General` or any other new channel you create, you will be able to see `@topbot`. Follow steps in [Verification Guide](Verification.md) to verify.
+16. Now if you go to the `General` or any other new channel you create, you will be able to see `@topbot`. Follow steps in [Verification Guide](Verification.md) to verify.
 
 ## Slack setup
 
@@ -178,7 +182,7 @@ You will need to create free accounts for Ms Teams and Slack in order to deploy 
 
 ![](images/allow.png)
 
-8. On the same page, go to `Scopes` -> `Select Permission Scopes` -> Add scope `channels.write` and click `Save changes`. Reinstall the app by clicking the link on the top banner.
+8. On the same page, go to `Scopes` -> `Oauth Scopes` -> Add scope `channels.write` and click `Save changes`. Reinstall the app by clicking the link on the top banner.
 
 ![](images/channels_write.png)
 
@@ -186,7 +190,7 @@ You will need to create free accounts for Ms Teams and Slack in order to deploy 
 
 9. On success, you will see your `Bot User OAuth Access Token` in `OAuth Tokens & Redirect URLs`. Copy this value and provide it in `.env` -> `# Slack configuration` -> `BOT_TOKEN`
 
-10. All the required values in `.env` should be filled by now. It should look something like,
+10. Your `.env` should look something like,
     ```
     # MS Teams configuration
     APP_ID=b77d1f2c-215a-47e5-9ec9-81bf4ac1ae3c
@@ -197,11 +201,14 @@ You will need to create free accounts for Ms Teams and Slack in order to deploy 
     BOT_TOKEN=xoxb-751151625041-759783514870-CT0xFbzPllSoRPJq3HfpPoz6
     TEAM=Topcoder
     CHANNEL=topbot
+
+    # Connect configuration
+    BEARER_TOKEN=
     ```
 
 11. Follow steps in the `Start server` section of this document. Once done, come back and follow subsequent steps.
 
-12. Once you have the NGROK_URL, click on `Features` -> ` Interactive Components`. Turn it on. In the `Request URL` section provide url, `NGROK_URL/slack/receive` and click `Save changes`
+12. Once you have the NGROK_URL, click on `Features` -> ` Interactive Components`. Turn it on. In the `Request URL` section provide url, `NGROK_URL/v5/topbot-ms/slack/receive` and click `Save changes`
 
 ![](images/interactive.png)
 
@@ -211,13 +218,43 @@ You will need to create free accounts for Ms Teams and Slack in order to deploy 
 
 ![](images/bot_events.png)
 
-15. Scroll up and provide a `Request URL`. Provide value `NGROK_URL/slack/receive` and click `Save changes` once verified.
+15. Scroll up and provide a `Request URL`. Provide value `NGROK_URL/v5/topbot-ms/slack/receive` and click `Save changes` once verified. If you need to reinstall the app, then do so.
 
 ![](images/verified.png)
 
+**Now you can* continue where you left off the MS teams setup. i.e. start from step 9 of `App Studio setup`**
+
 ## Start server
 
-Once you have all the values needed by `.env`, you can start the server. Follow these steps,
+### Obtain Connect User token
+
+1. With the network tools of your browser open, login to https://connect.topcoder-dev.com using user `mess` and password `appirio123`. (Alternate credentials are `tonyj`/`appirio123` or `callmekatootie`/`appirio123`)
+
+2. Find a request in the list of api calls with a bearer token. One such request is the 2nd call made to `mess/`
+
+![](images/token.png)
+
+3. Copy this value and update `Connect configuration` -> `BEARER_TOKEN` in `.env`.
+
+### Run server
+
+You should have all the values needed by `.env` now. It will look something like,
+    ```
+      # MS Teams configuration
+      APP_ID=f2c4e3bd-a40d-4be6-b85e-57c7a3397858
+      APP_PASSWORD=V:I?UKPy=Frz@2hEoogQ6I2YGKXj3tT?
+
+      # Slack configuration
+      SIGNING_SECRET=49162bd8ebe79a8f64a9a29332e22c74
+      BOT_TOKEN=xoxb-755656631591-802800975089-14AJhPBPsXIneGK1Ci5FTozI
+      TEAM=appify
+      CHANNEL=topbot_ms
+
+      # Connect configuration
+        BEARER_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJjb3BpbG90IiwiYWRtaW5pc3RyYXRvciJdLCJpc3MiOiJodHRwczovL2FwaS50b3Bjb2Rlci1kZXYuY29tIiwiaGFuZGxlIjoibWVzcyIsImV4cCI6MTU3MjI1ODE5MiwidXNlcklkIjoiMzA1Mzg0IiwiaWF0IjoxNTcyMjU3NTkyLCJlbWFpbCI6Im1lc3NAYXBwaXJpby5jb20iLCJqdGkiOiJjY2EyZTQ4YS0yNjAzLTQ4ZTktYjQwMy1jNjYzNzU2ZWFlZDAifQ.Qt1RE0pIZyZZVUREjlsrJanSM9uuhcY3G71DyHeSC6o
+    ```
+
+You can now start the server. Follow these steps,
 
 1. Install node modules `npm i`
 
@@ -226,3 +263,5 @@ Once you have all the values needed by `.env`, you can start the server. Follow 
 3. Start the server `npm start`
 
 4. Expose the server using `ngrok`. Run `ngrok http 3000`. You will obtain a url like `https://c238256a.ngrok.io`. Note down this value. I will refer to it as NGROK_URL.
+
+**Now you can continue where you left off the Slack setup. i.e. start from step 11 of `Create a Slack App`**

@@ -26,3 +26,5 @@ Follow instructions in [Deployment Guide](docs/Deployment.md)
 ## Verification guide
 
 Follow instructions in [Verification Guide](docs/Verification.md)
+
+See verification video https://youtu.be/QiCehksn4pw
