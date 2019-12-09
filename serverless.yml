@@ -1,0 +1,51 @@
+service: teams_lambda
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+
+  environment:
+    # AWS configuration
+    AWS_ACCESS_KEY_ID: FAKE_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: FAKE_SECRET_ACCESS_KEY
+    AWS_REGION: FAKE_REGION
+    DYNAMODB_ENDPOINT: http://localhost:8000
+
+    # Client Teams bot configuration
+    APP_ID: b77d1f2c-215a-47e5-9ec9-81bf4ac1ae3c
+    APP_PASSWORD: 'Jips0:0JPN.B-kSuSZG3XWza8I:aFnE:'
+    
+    # Central TC Lambda URI
+    CENTRAL_LAMBDA_URI: 'http://localhost:3000'
+
+functions:
+  events:
+    handler: src/functions/events.handler
+    description: Handles ms teams events
+    events:
+      - http:
+          path: teams/events
+          method: post
+
+  response:
+    handler: src/functions/response.handler
+    description: Handles project response
+    events:
+      - http:
+          path: response
+          method: post
+
+  approve:
+    handler: src/functions/approve.handler
+    description: Receives project approve
+    events:
+      - http:
+          path: approve
+          method: post
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    port: 3002

@@ -1,0 +1,26 @@
+{
+  "name": "teams-lambda",
+  "version": "1.0.0",
+  "description": "REST API's for Teams lambda",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "standard",
+    "lint:fix": "standard --fix"
+  },
+  "author": "Topcoder",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@hapi/joi": "^16.1.8",
+    "aws-sdk": "^2.585.0",
+    "botframework-connector": "^4.6.2",
+    "config": "^3.2.4",
+    "http-status-codes": "^1.4.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.5",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "serverless-offline": "^5.12.1",
+    "standard": "^14.3.1"
+  }
+}
