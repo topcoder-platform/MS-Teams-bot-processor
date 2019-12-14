@@ -17,7 +17,18 @@ const logger = require('../common/logger')
  * @param {Object} teamsClient
  */
 async function handleCommand (body, teamsClient) {
-  const command = body.text.split(' ')[1].trim()
+  let command = body.text.split(' ')[1]
+  const conversationId = body.conversation.id
+  
+  if(!command) {
+    return teamsClient.conversations.sendToConversation(conversationId, {
+      text: 'Please specify a valid command. Issue @topbot help to see the list of available commands',
+      type: 'message'
+    })
+  }
+
+  command = command.trim()
+
   switch (command) {
     case config.get('COMMANDS.REQUEST'):
       await request.handler(body, teamsClient)
