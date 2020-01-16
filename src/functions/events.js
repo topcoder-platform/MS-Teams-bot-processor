@@ -1,9 +1,8 @@
 /**
  * Handler for teams events
  */
-const HttpStatus = require('http-status-codes')
 const config = require('config')
-const { getTeamsClient, validateRequest } = require('../common/helper')
+const { getTeamsClient } = require('../common/helper')
 const request = require('./request')
 const email = require('./email')
 const accept = require('./accept')
@@ -19,8 +18,8 @@ const logger = require('../common/logger')
 async function handleCommand (body, teamsClient) {
   let command = body.text.split(' ')[1]
   const conversationId = body.conversation.id
-  
-  if(!command) {
+
+  if (!command) {
     return teamsClient.conversations.sendToConversation(conversationId, {
       text: 'Please specify a valid command. Issue @topbot help to see the list of available commands',
       type: 'message'
@@ -65,24 +64,17 @@ async function handleButton (body, teamsClient) {
 
 module.exports.handler = async event => {
   try {
-    var body = JSON.parse(event.body)
-    const authHeader = event.headers.authorization || event.headers.Authorization || ''
+    if (event && event.Records && event.Records[0] && event.Records[0].Sns) {
+      var body = JSON.parse(event.Records[0].Sns.Message)
+      var teamsClient = getTeamsClient(body.serviceUrl)
 
-    // Validate request
-    if (!validateRequest(body, authHeader)) {
-      return {
-        statusCode: HttpStatus.UNAUTHORIZED
-      }
-    }
-
-    var teamsClient = getTeamsClient(body.serviceUrl)
-
-    if (body.type === 'message') {
-      const isButton = (body.value || {}).isButton
-      if (!isButton) {
-        await handleCommand(body, teamsClient)
-      } else {
-        await handleButton(body, teamsClient)
+      if (body.type === 'message') {
+        const isButton = (body.value || {}).isButton
+        if (!isButton) {
+          await handleCommand(body, teamsClient)
+        } else {
+          await handleButton(body, teamsClient)
+        }
       }
     }
   } catch (e) {

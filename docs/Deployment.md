@@ -2,29 +2,43 @@
 
 ## Prerequisites
 
-1. Node.js > v10.14.2
+1. Node.js >= v12.14.1
 
-2. ngrok
+2. ngrok: https://ngrok.com/download
 
-## Dynamodb setup
+3. localstack: https://github.com/localstack/localstack
 
-If you already have dynamodb running, then you can skip the install and run steps 1 and 2
+## AWS Services
 
-1. Download and install dynamodb from [here](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html)
+Teams lambda uses Dynamodb to store/retrieve data and listens to SNS topics to obtain events from Topbot - Receiver.
 
-2. In terminal, navigate to the directory where you extracted DynamoDBLocal.jar, and enter the following command. `java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb`. This will start dynamodb on port 8000 by default.
+Both these services can be run locally using localstack.
 
-3. **ENV** Provide aws dynamodb configuration options in the `provider:environment` field in `serverless.yml`. For local deployment, the values will be,
+1. Start the localstack server, `localstack start`.You will obtain a port number for dynamodb and sns.
+
+2. **ENV** Update `provider:environment:DYNAMODB_ENDPOINT` field in `serverless.yml` with the dynamodb port,
     ```
-    environment:
+      environment:
         # AWS configuration
         AWS_ACCESS_KEY_ID: FAKE_ACCESS_KEY_ID
         AWS_SECRET_ACCESS_KEY: FAKE_SECRET_ACCESS_KEY
         AWS_REGION: FAKE_REGION
-        DYNAMODB_ENDPOINT: http://localhost:8000
+        DYNAMODB_ENDPOINT: http://localhost:4569 # This value
     ```
 
-3. [Optional] You can view the contents of dynamodb in your browser using a tool like [dynamodb-admin](https://www.npmjs.com/package/dynamodb-admin)
+3. **ENV** Update `custom:serverless-offline-sns:sns-endpoint` field in `serverless.yml` with the sns port,
+    ```
+    serverless-offline-sns:
+        port: 4002
+        debug: false
+        sns-endpoint: http://localhost:4575 # This value
+    ```
+
+Update `provider:environment:SNS_ENDPOINT` with this value.
+
+The other sns config values can be set the same unless you explicitly change it in sns.
+
+4. [Optional] You can view the contents of dynamodb in your browser using a tool like [dynamodb-admin](https://www.npmjs.com/package/dynamodb-admin)
 
 ## Ms Teams setup
 
@@ -176,7 +190,9 @@ provider:
 
 4. In the `teams-lambda` directory run `serverless offline` to start the Serverless API gateway on port 3002. The gateway runs the lambda functions on demand.
 
-5. Expose the server using `ngrok`. Run `ngrok http 3002`. You will obtain a url like `https://9bb718af.au.ngrok.io`. Note down this value. I will refer to it as `NGROK_URL`.
+5. You should see that the SNS topics, `client-teams-events` is created. You can verify this using the aws cli,
+`aws --endpoint-url=http://localhost:4575 sns list-topics`
+6. Expose the server using `ngrok`. Run `ngrok http 3002`. You will obtain a url like `https://9bb718af.au.ngrok.io`. Note down this value. I will refer to it as `NGROK_URL`.
 
 **NOTE on ngrok** 
 
@@ -214,5 +230,9 @@ To start another ngrok session just choose another region to run in by executing
 17. Now if you go to the `General` or any other new channel you create, you will be able to see `@topbot`. 
 
 **NOTE** If the NGROK_URL is changed or is deployed for the first time, you might need to wait for a few minutes before you can issue commands successfully.
+
+## Setup TC Central lambda
+
+1. If you haven't already done it, then setup TC Central lambda by following its `DeploymentGuide.md` before moving on to [Verification Guide](./VerificationGuide.md). Note that if you change the port of TC Central lambda, then you need to update `provider:environment:CENTRAL_LAMBDA_URI` field in `serverless.yml` **and restart** Teams lambda.
 
 Follow steps in [Verification Guide](Verification.md) to verify.

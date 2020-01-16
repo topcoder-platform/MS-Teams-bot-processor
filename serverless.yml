@@ -9,7 +9,7 @@ provider:
     AWS_ACCESS_KEY_ID: FAKE_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY: FAKE_SECRET_ACCESS_KEY
     AWS_REGION: FAKE_REGION
-    DYNAMODB_ENDPOINT: http://localhost:8000
+    DYNAMODB_ENDPOINT: http://localhost:4569
 
     # Client Teams bot configuration
     APP_ID: b77d1f2c-215a-47e5-9ec9-81bf4ac1ae3c
@@ -18,14 +18,28 @@ provider:
     # Central TC Lambda URI
     CENTRAL_LAMBDA_URI: 'http://localhost:3000'
 
+    # SNS Configuration
+    SNS_ENDPOINT: http://localhost:4575
+    SNS_REGION: us-east-1
+    SNS_ACCOUNT_ID: 123456789012
+
+    # SNS Topics
+    CLIENT_TEAMS_EVENTS_TOPIC: client-teams-events
+
 functions:
-  events:
-    handler: src/functions/events.handler
+  client_teams_events:
+    handler: src/functions/receiver/events.handler
     description: Handles ms teams events
     events:
       - http:
           path: teams/events
           method: post
+
+  events:
+    handler: src/functions/events.handler
+    description: Handles ms teams events
+    events:
+      - sns: client-teams-events
 
   response:
     handler: src/functions/response.handler
@@ -45,7 +59,13 @@ functions:
 
 plugins:
   - serverless-offline
+  - serverless-offline-sns
 
 custom:
   serverless-offline:
     port: 3002
+  
+  serverless-offline-sns:
+    port: 4002
+    debug: false
+    sns-endpoint: http://localhost:4575
