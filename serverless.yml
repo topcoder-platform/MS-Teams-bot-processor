@@ -9,18 +9,18 @@ provider:
     AWS_ACCESS_KEY_ID: FAKE_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY: FAKE_SECRET_ACCESS_KEY
     AWS_REGION: FAKE_REGION
-    DYNAMODB_ENDPOINT: http://localhost:4569
+    DYNAMODB_ENDPOINT: http://localhost:8000
 
     # Client Teams bot configuration
     APP_ID: b77d1f2c-215a-47e5-9ec9-81bf4ac1ae3c
     APP_PASSWORD: 'Jips0:0JPN.B-kSuSZG3XWza8I:aFnE:'
-    
+
     # Central TC Lambda URI
     CENTRAL_LAMBDA_URI: 'http://localhost:3000'
 
     # SNS Configuration
-    SNS_ENDPOINT: http://localhost:4575
-    SNS_REGION: us-east-1
+    SNS_ENDPOINT: http://localhost:4002
+    SNS_REGION: us-west-2
     SNS_ACCOUNT_ID: 123456789012
 
     # SNS Topics
@@ -64,8 +64,7 @@ plugins:
 custom:
   serverless-offline:
     port: 3002
-  
+
   serverless-offline-sns:
     port: 4002
     debug: false
-    sns-endpoint: http://localhost:4575
