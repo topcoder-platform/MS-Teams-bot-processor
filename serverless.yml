@@ -1,8 +1,9 @@
-service: teams_lambda
+service: teamsBotLambda
 
 provider:
   name: aws
   runtime: nodejs10.x
+  profile: bot-dev
 
   environment:
     # AWS configuration
