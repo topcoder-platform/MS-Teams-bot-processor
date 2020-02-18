@@ -3,7 +3,17 @@ const { MicrosoftAppCredentials, ConnectorClient } = require('botframework-conne
 const credentials = new MicrosoftAppCredentials(process.env.APP_ID, process.env.APP_PASSWORD)
 
 const { SimpleCredentialProvider, JwtTokenValidation } = require('botframework-connector')
-const credentialsProvider = new SimpleCredentialProvider(process.env.CLIENT_TEAMS_APP_ID, process.env.CLIENT_TEAMS_APP_PASSWORD)
+const credentialsProvider = new SimpleCredentialProvider(process.env.APP_ID, process.env.APP_PASSWORD)
+
+const logger = require('./logger')
+
+/**
+ * Creates an arn from topic name
+ * @param {String} topic
+ */
+function getArnForTopic (topic) {
+  return `arn:aws:sns:${process.env.SNS_REGION}:${process.env.SNS_ACCOUNT_ID}:${topic}`
+}
 
 /**
  * Returns an instance of the sns client
@@ -20,14 +30,6 @@ function getSnsClient () {
 }
 
 /**
- * Creates an arn from topic name
- * @param {String} topic
- */
-function getArnForTopic (topic) {
-  return `arn:aws:sns:${process.env.SNS_REGION}:${process.env.SNS_ACCOUNT_ID}:${topic}`
-}
-
-/**
  * Validates incoming request from teams
  * @param {Object} body
  * @param {String} authHeader
@@ -37,6 +39,7 @@ async function authenticateTeamsRequest (body, authHeader) {
     const identity = await JwtTokenValidation.authenticateRequest(body, authHeader, credentialsProvider, '')
     return identity.isAuthenticated
   } catch (e) {
+    logger.logFullError(e)
     return false
   }
 }
@@ -44,7 +47,7 @@ async function authenticateTeamsRequest (body, authHeader) {
 /**
  * Returns an instance of the slack web api client
  */
-function getTeamsClient (serviceUrl = 'https://smba.trafficmanager.net/in/') {
+function getTeamsClient (serviceUrl) {
   MicrosoftAppCredentials.trustServiceUrl(serviceUrl)
   return new ConnectorClient(credentials, {
     baseUri: serviceUrl
@@ -54,6 +57,6 @@ function getTeamsClient (serviceUrl = 'https://smba.trafficmanager.net/in/') {
 module.exports = {
   getTeamsClient,
   getSnsClient,
-  getArnForTopic,
-  authenticateTeamsRequest
+  authenticateTeamsRequest,
+  getArnForTopic
 }

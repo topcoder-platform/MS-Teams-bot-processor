@@ -9,9 +9,7 @@ const { getTeamsClient } = require('../common/helper')
 const { getProject } = require('../common/dbHelper')
 const logger = require('../common/logger')
 
-const teamsClient = getTeamsClient()
-
-module.exports.handler = async event => {
+module.exports.handler = logger.traceFunction('approve.handler', async event => {
   try {
     const { error, value } = schema.approveSchema.validate(JSON.parse(event.body))
     if (error) {
@@ -22,6 +20,7 @@ module.exports.handler = async event => {
     }
 
     const project = await getProject(value.projectId)
+    const teamsClient = getTeamsClient(project.serviceUrl)
 
     // Check if exists
     if (!project) {
@@ -49,4 +48,4 @@ module.exports.handler = async event => {
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR
     }
   }
-}
+})

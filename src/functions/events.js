@@ -62,7 +62,7 @@ async function handleButton (body, teamsClient) {
   }
 }
 
-module.exports.handler = async event => {
+module.exports.handler = logger.traceFunction('events.handler', async event => {
   try {
     if (event && event.Records && event.Records[0] && event.Records[0].Sns) {
       var body = JSON.parse(event.Records[0].Sns.Message)
@@ -84,4 +84,4 @@ module.exports.handler = async event => {
       type: 'message'
     })
   }
-}
+})

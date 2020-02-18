@@ -4,8 +4,9 @@
 const rp = require('request-promise')
 const config = require('config')
 const { getProject, updateProjectStatus } = require('../common/dbHelper')
+const logger = require('../common/logger')
 
-module.exports.handler = async (body, teamsClient) => {
+module.exports.handler = logger.traceFunction('accept.handler', async (body, teamsClient) => {
   // Get project
   const projectId = body.value.projectId
   const project = await getProject(projectId)
@@ -59,4 +60,4 @@ module.exports.handler = async (body, teamsClient) => {
       })
     }
   }
-}
+})

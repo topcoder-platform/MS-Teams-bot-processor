@@ -5,9 +5,11 @@ const rp = require('request-promise')
 const HttpStatus = require('http-status-codes')
 const config = require('config')
 const { getProjectByTeamsConversationId } = require('../common/dbHelper')
+const logger = require('../common/logger')
+
 const emailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i // eslint-disable-line
 
-module.exports.handler = async (body, teamsClient) => {
+module.exports.handler = logger.traceFunction('email.handler', async (body, teamsClient) => {
   const conversationId = body.conversation.id
   // Check if email command is issued inside a project request conversation
   const project = await getProjectByTeamsConversationId(conversationId)
@@ -61,6 +63,7 @@ module.exports.handler = async (body, teamsClient) => {
       type: 'message'
     })
   } catch (e) {
+    logger.logFullError(e)
     // Email has already been invited
     if (e.statusCode === HttpStatus.FORBIDDEN) {
       return teamsClient.conversations.sendToConversation(conversationId, {
@@ -71,4 +74,4 @@ module.exports.handler = async (body, teamsClient) => {
       throw e
     }
   }
-}
+})
