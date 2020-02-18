@@ -3,7 +3,7 @@ const { MicrosoftAppCredentials, ConnectorClient } = require('botframework-conne
 const credentials = new MicrosoftAppCredentials(process.env.APP_ID, process.env.APP_PASSWORD)
 
 const { SimpleCredentialProvider, JwtTokenValidation } = require('botframework-connector')
-const credentialsProvider = new SimpleCredentialProvider(process.env.APP_ID, process.env.APP_PASSWORD)
+const credentialsProvider = new SimpleCredentialProvider(process.env.CLIENT_TEAMS_APP_ID, process.env.CLIENT_TEAMS_APP_PASSWORD)
 
 /**
  * Returns an instance of the sns client
