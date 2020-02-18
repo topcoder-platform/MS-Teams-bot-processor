@@ -44,7 +44,7 @@ if (process.env.NODE_ENV !== 'production') {
  * @param logger
  * @param err
  */
-function logFullError(logger, err) {
+const logFullError = (logger, err) => {
   if (err && err.stack) {
     logger.error(err.stack)
   } else {
