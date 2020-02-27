@@ -4,6 +4,7 @@ provider:
   name: aws
   runtime: nodejs10.x
   profile: bot-dev
+  region: us-east-1
 
   iamRoleStatements:
     - Effect: 'Allow'
@@ -12,12 +13,21 @@ provider:
         - 'sns:GetTopicAttributes'
       Resource:
         - !Ref clientTeamsEvents
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+      Resource:
+        - Fn::ImportValue: ProjectsTableArn
 
   environment:
     # AWS configuration
-    ACCESS_KEY_ID: FAKE_ACCESS_KEY_ID
-    SECRET_ACCESS_KEY: FAKE_SECRET_ACCESS_KEY
-    REGION: FAKE_REGION
+    ACCESS_KEY_ID: DEFAULT_ACCESS_KEY
+    SECRET_ACCESS_KEY: DEFAULT_SECRET
+    REGION: localhost
     DYNAMODB_ENDPOINT: http://localhost:8000
 
     # Client Teams bot configuration
