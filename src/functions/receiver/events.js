@@ -1,13 +1,14 @@
 const HttpStatus = require('http-status-codes')
 const { authenticateTeamsRequest, getSnsClient, getArnForTopic } = require('../../common/helper')
+const logger = require('../../common/logger')
 
-module.exports.handler = async event => {
+module.exports.handler = logger.traceFunction('receiver.events.handler', async event => {
   console.log('Receiver Event : ', event)
   const body = JSON.parse(event.body)
   const authHeader = event.headers.authorization || event.headers.Authorization || ''
 
   // Validate request
-  if (!authenticateTeamsRequest(body, authHeader)) {
+  if (!await authenticateTeamsRequest(body, authHeader)) {
     return {
       statusCode: HttpStatus.UNAUTHORIZED
     }
@@ -22,7 +23,7 @@ module.exports.handler = async event => {
       })
     }
   } catch (err) {
-    console.log('err : ', err)
+    logger.logFullError(err)
     return {
       statusCode: 500,
       body: JSON.stringify({
@@ -30,7 +31,7 @@ module.exports.handler = async event => {
       })
     }
   }
-}
+})
 
 async function publishSnsTopic (data) {
   const params = {

@@ -4,28 +4,46 @@ provider:
   name: aws
   runtime: nodejs10.x
   profile: bot-dev
+  region: us-east-1
+
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'sns:Publish'
+        - 'sns:GetTopicAttributes'
+      Resource:
+        - !Ref clientTeamsEvents
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+      Resource:
+        - Fn::ImportValue: ProjectsTableArn
 
   environment:
     # AWS configuration
-    AWS_ACCESS_KEY_ID: FAKE_ACCESS_KEY_ID
-    AWS_SECRET_ACCESS_KEY: FAKE_SECRET_ACCESS_KEY
-    AWS_REGION: FAKE_REGION
+    ACCESS_KEY_ID: DEFAULT_ACCESS_KEY
+    SECRET_ACCESS_KEY: DEFAULT_SECRET
+    REGION: localhost
     DYNAMODB_ENDPOINT: http://localhost:8000
 
     # Client Teams bot configuration
-    APP_ID: b77d1f2c-215a-47e5-9ec9-81bf4ac1ae3c
-    APP_PASSWORD: 'Jips0:0JPN.B-kSuSZG3XWza8I:aFnE:'
+    APP_ID: 8c08f8e1-f1a3-4076-87e3-51ba152233c9
+    APP_PASSWORD: 'hWB.hbn/JZS3i0N2m./rU7RPu5Y1iuvT'
 
     # Central TC Lambda URI
     CENTRAL_LAMBDA_URI: 'http://localhost:3000'
 
     # SNS Configuration
     SNS_ENDPOINT: http://localhost:4002 # local development only
-    SNS_REGION: us-west-2
+    SNS_REGION: ${self:custom.region}
     SNS_ACCOUNT_ID: 123456789012
 
     # SNS Topics
-    CLIENT_TEAMS_EVENTS_TOPIC: client-teams-events
+    CLIENT_TEAMS_EVENTS_TOPIC: ${self:custom.sns.clientTeamsEvents}
 
 functions:
   client_teams_events:
@@ -40,7 +58,9 @@ functions:
     handler: src/functions/events.handler
     description: Handles ms teams events
     events:
-      - sns: client-teams-events
+      - sns:
+          arn: !Ref clientTeamsEvents
+          topicName: ${self:custom.sns.clientTeamsEvents}
 
   response:
     handler: src/functions/response.handler
@@ -69,3 +89,15 @@ custom:
   serverless-offline-sns:
     port: 4002
     debug: false
+
+  sns:
+    clientTeamsEvents: client-teams-events
+
+  region: ${opt:region, self:provider.region}
+
+resources:
+  Resources:
+    clientTeamsEvents:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: ${self:custom.sns.clientTeamsEvents}

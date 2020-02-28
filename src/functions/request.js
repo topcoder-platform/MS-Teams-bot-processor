@@ -4,8 +4,9 @@
 const rp = require('request-promise')
 const config = require('config')
 const { getProjectByTeamsConversationId } = require('../common/dbHelper')
+const logger = require('../common/logger')
 
-module.exports.handler = async (body, teamsClient) => {
+module.exports.handler = logger.traceFunction('request.handler', async (body, teamsClient) => {
   const description = body.text.split(' ').slice(2).join(' ').trim() // Remove the first two words from text like "<user> request description"
   const conversationId = body.conversation.id
 
@@ -34,6 +35,7 @@ module.exports.handler = async (body, teamsClient) => {
       description,
       requester: body.from.name,
       teamsConversationId: conversationId,
+      serviceUrl: body.serviceUrl,
       platform: config.get('PLATFORMS.TEAMS')
     },
     json: true
@@ -44,4 +46,4 @@ module.exports.handler = async (body, teamsClient) => {
     text: 'Request posted to Topcoder',
     type: 'message'
   })
-}
+})
