@@ -12,7 +12,7 @@
   "author": "Topcoder",
   "license": "ISC",
   "dependencies": {
-    "botbuilder-adapter-slack": "^1.0.4",
+    "botbuilder-adapter-slack": "^1.0.5",
     "botkit": "^4.5.0",
     "config": "^3.2.2",
     "dotenv": "^8.1.0",
