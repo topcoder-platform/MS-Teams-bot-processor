@@ -14,7 +14,7 @@
   "dependencies": {
     "botbuilder-adapter-slack": "^1.0.4",
     "botkit": "^4.5.0",
-    "config": "^3.2.2",
+    "config": "^3.3.8",
     "dotenv": "^8.1.0",
     "uuid": "^3.3.3",
     "winston": "^3.2.1"
